@@ -1,0 +1,35 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit site</title>
+  </head>
+  <body>
+    <h1>Edit</h1>
+    <form action="/heritages/<%= site._id %>?_method=PUT" method="post">
+      <div>
+        <label for="title">Title</label>
+        <input
+          type="text"
+          id="title"
+          name="heritage[title]"
+          value="<%= site.title %>"
+        />
+      </div>
+      <div>
+        <label for="location">Location</label>
+        <input
+          type="text"
+          id="location"
+          name="heritage[location]"
+          value="<%= site.location %>"
+        />
+      </div>
+      <button type="submit">Update site</button>
+    </form>
+    <a href="/heritages/<%= site._id %>">Back to site</a>
+  </body>
+</html>

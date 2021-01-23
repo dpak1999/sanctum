@@ -3,8 +3,8 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const methodOverride = require("method-override");
 const Heritage = require("./models/heritage");
-const heritage = require("./models/heritage");
 
 mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
@@ -22,6 +22,7 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -45,6 +46,17 @@ app.post("/heritages", async (req, res) => {
 app.get("/heritages/:id", async (req, res) => {
   const site = await Heritage.findById(req.params.id);
   res.render("sites/show", { site });
+});
+
+app.get("/heritages/:id/edit", async (req, res) => {
+  const site = await Heritage.findById(req.params.id);
+  res.render("sites/edit", { site });
+});
+
+app.put("/heritages/:id", async (req, res) => {
+  const { id } = req.params;
+  const site = await Heritage.findByIdAndUpdate(id, { ...req.body.heritage });
+  res.redirect(`/heritages/${site._id}`);
 });
 
 app.listen(3000, () => {
