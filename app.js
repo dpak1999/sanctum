@@ -59,6 +59,12 @@ app.put("/heritages/:id", async (req, res) => {
   res.redirect(`/heritages/${site._id}`);
 });
 
+app.delete("/heritages/:id", async (req, res) => {
+  const { id } = req.params;
+  await Heritage.findByIdAndDelete(id);
+  res.redirect(`/heritages`);
+});
+
 app.listen(3000, () => {
   console.log("App listening on port 3000!");
 });
