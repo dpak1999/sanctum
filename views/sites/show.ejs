@@ -1,27 +1,18 @@
 <!-- @format -->
+<% layout("layouts/boilerplate") %>
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Show</title>
-  </head>
-  <body>
-    <h1>Showing</h1>
-    <h3><%= site.title %></h3>
-    <h3><%= site.location %></h3>
+<h1>Showing</h1>
+<h3><%= site.title %></h3>
+<h3><%= site.location %></h3>
 
-    <footer>
-      <p>
-        <a href="/heritages/<%= site._id %>/edit">Edit site</a>
-      </p>
-      <div>
-        <form action="/heritages/<%= site._id %>?_method=DELETE" method="POST">
-          <button>Delete</button>
-        </form>
-      </div>
-      <a href="/heritages">All sites</a>
-    </footer>
-  </body>
-</html>
+<footer>
+  <p>
+    <a href="/heritages/<%= site._id %>/edit">Edit site</a>
+  </p>
+  <div>
+    <form action="/heritages/<%= site._id %>?_method=DELETE" method="POST">
+      <button>Delete</button>
+    </form>
+  </div>
+  <a href="/heritages">All sites</a>
+</footer>

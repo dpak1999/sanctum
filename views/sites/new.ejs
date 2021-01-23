@@ -1,24 +1,15 @@
 <!-- @format -->
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New site</title>
-  </head>
-  <body>
-    <form action="/heritages" method="post">
-      <div>
-        <label for="title">Title</label>
-        <input type="text" id="title" name="heritage[title]" />
-      </div>
-      <div>
-        <label for="location">Location</label>
-        <input type="text" id="location" name="heritage[location]" />
-      </div>
-      <button type="submit">Add site</button>
-    </form>
-    <a href="/heritages">Back</a>
-  </body>
-</html>
+<% layout("layouts/boilerplate") %>
+<form action="/heritages" method="post">
+  <div>
+    <label for="title">Title</label>
+    <input type="text" id="title" name="heritage[title]" />
+  </div>
+  <div>
+    <label for="location">Location</label>
+    <input type="text" id="location" name="heritage[location]" />
+  </div>
+  <button type="submit">Add site</button>
+</form>
+<a href="/heritages">Back</a>
