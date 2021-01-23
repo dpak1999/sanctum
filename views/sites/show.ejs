@@ -1,18 +1,16 @@
 <!-- @format -->
 <% layout("layouts/boilerplate") %>
 
-<h1>Showing</h1>
-<h3><%= site.title %></h3>
-<h3><%= site.location %></h3>
-
-<footer>
-  <p>
-    <a href="/heritages/<%= site._id %>/edit">Edit site</a>
-  </p>
-  <div>
-    <form action="/heritages/<%= site._id %>?_method=DELETE" method="POST">
-      <button>Delete</button>
-    </form>
-  </div>
-  <a href="/heritages">All sites</a>
-</footer>
+<h1><%= site.title %></h1>
+<h2><%= site.location %></h2>
+<img src="<%= site.image %>" alt="" />
+<p><%= site.description%></p>
+<p>
+  <a href="/heritages/<%= site._id %>/edit">Edit site</a>
+</p>
+<div>
+  <form action="/heritages/<%= site._id %>?_method=DELETE" method="POST">
+    <button>Delete</button>
+  </form>
+</div>
+<a href="/heritages">All sites</a>
