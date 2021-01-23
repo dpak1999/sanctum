@@ -3,6 +3,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const Heritage = require("./models/heritage");
 
 mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
@@ -22,6 +23,17 @@ app.set("views", path.join(__dirname, "views"));
 
 app.get("/", (req, res) => {
   res.render("home");
+});
+
+app.get("/makesite", async (req, res) => {
+  const site = new Heritage({
+    title: "My backyard",
+    description: "Most beautful heritage site",
+    price: "4000",
+    location: "Odisha",
+  });
+  await site.save();
+  res.send(site);
 });
 
 app.listen(3000, () => {
