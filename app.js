@@ -4,6 +4,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const Heritage = require("./models/heritage");
+const heritage = require("./models/heritage");
 
 mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
@@ -20,6 +21,7 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -28,6 +30,16 @@ app.get("/", (req, res) => {
 app.get("/heritages", async (req, res) => {
   const sites = await Heritage.find({});
   res.render("sites/index", { sites });
+});
+
+app.get("/heritages/new", (req, res) => {
+  res.render("sites/new");
+});
+
+app.post("/heritages", async (req, res) => {
+  const site = new Heritage(req.body.heritage);
+  await site.save();
+  res.redirect(`/heritages/${site._id}`);
 });
 
 app.get("/heritages/:id", async (req, res) => {

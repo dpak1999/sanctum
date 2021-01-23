@@ -9,6 +9,9 @@
   </head>
   <body>
     <h1>All heritage sites</h1>
+    <div>
+      <a href="/heritages/new">Add site</a>
+    </div>
     <ul>
       <% for (let site of sites) {%>
       <li><a href="/heritages/<%= site._id %>"><%= site.title %></a></li>
