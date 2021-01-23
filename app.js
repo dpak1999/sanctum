@@ -25,15 +25,14 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.get("/makesite", async (req, res) => {
-  const site = new Heritage({
-    title: "My backyard",
-    description: "Most beautful heritage site",
-    price: "4000",
-    location: "Odisha",
-  });
-  await site.save();
-  res.send(site);
+app.get("/heritages", async (req, res) => {
+  const sites = await Heritage.find({});
+  res.render("sites/index", { sites });
+});
+
+app.get("/heritages/:id", async (req, res) => {
+  const site = await Heritage.findById(req.params.id);
+  res.render("sites/show", { site });
 });
 
 app.listen(3000, () => {

@@ -1,0 +1,18 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hertage sites</title>
+  </head>
+  <body>
+    <h1>All heritage sites</h1>
+    <ul>
+      <% for (let site of sites) {%>
+      <li><a href="/heritages/<%= site._id %>"><%= site.title %></a></li>
+      <% } %>
+    </ul>
+  </body>
+</html>
