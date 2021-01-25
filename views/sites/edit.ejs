@@ -5,7 +5,12 @@
 <div class="row">
   <h1 class="text-center">Edit Site</h1>
   <div class="col-6 offset-3">
-    <form action="/heritages/<%= site._id %>?_method=PUT" method="post">
+    <form
+      action="/heritages/<%= site._id %>?_method=PUT"
+      method="post"
+      novalidate
+      class="needs-validation"
+    >
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
         <input
@@ -14,6 +19,7 @@
           id="title"
           name="heritage[title]"
           value="<%= site.title %>"
+          required
         />
       </div>
       <div class="mb-3">
@@ -24,6 +30,7 @@
           id="location"
           name="heritage[location]"
           value="<%= site.location %>"
+          required
         />
       </div>
       <div class="mb-3">
@@ -34,6 +41,7 @@
           id="image"
           name="heritage[image]"
           value="<%= site.image %>"
+          required
         />
       </div>
       <div class="mb-3">
@@ -48,6 +56,7 @@
             aria-describedby="price-label"
             name="heritage[price]"
             value="<%= site.price %>"
+            required
           />
         </div>
       </div>
@@ -58,6 +67,7 @@
           type="text"
           id="description"
           name="heritage[description]"
+          required
         >
        <%= site.description %>
       </textarea

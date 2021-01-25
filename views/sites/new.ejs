@@ -4,7 +4,7 @@
 <div class="row">
   <h1 class="text-center">New Site</h1>
   <div class="col-6 offset-3">
-    <form action="/heritages" method="post">
+    <form action="/heritages" method="post" novalidate class="needs-validation">
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
         <input
@@ -12,6 +12,7 @@
           type="text"
           id="title"
           name="heritage[title]"
+          required
         />
       </div>
       <div class="mb-3">
@@ -21,6 +22,7 @@
           type="text"
           id="location"
           name="heritage[location]"
+          required
         />
       </div>
       <div class="mb-3">
@@ -30,6 +32,7 @@
           type="text"
           id="image"
           name="heritage[image]"
+          required
         />
       </div>
       <div class="mb-3">
@@ -43,6 +46,7 @@
             aria-label="price"
             aria-describedby="price-label"
             name="heritage[price]"
+            required
           />
         </div>
       </div>
@@ -53,6 +57,7 @@
           type="text"
           id="description"
           name="heritage[description]"
+          required
         ></textarea>
       </div>
       <div class="mb-3">
