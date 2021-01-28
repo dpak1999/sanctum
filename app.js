@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const Heritage = require("./models/heritage");
+const catchAsync = require("./utils/catchAsync");
 
 mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
@@ -30,41 +31,63 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.get("/heritages", async (req, res) => {
-  const sites = await Heritage.find({});
-  res.render("sites/index", { sites });
-});
+app.get(
+  "/heritages",
+  catchAsync(async (req, res) => {
+    const sites = await Heritage.find({});
+    res.render("sites/index", { sites });
+  })
+);
 
 app.get("/heritages/new", (req, res) => {
   res.render("sites/new");
 });
 
-app.post("/heritages", async (req, res) => {
-  const site = new Heritage(req.body.heritage);
-  await site.save();
-  res.redirect(`/heritages/${site._id}`);
-});
+app.post(
+  "/heritages",
+  catchAsync(async (req, res, next) => {
+    const site = new Heritage(req.body.heritage);
+    await site.save();
+    res.redirect(`/heritages/${site._id}`);
+  })
+);
 
-app.get("/heritages/:id", async (req, res) => {
-  const site = await Heritage.findById(req.params.id);
-  res.render("sites/show", { site });
-});
+app.get(
+  "/heritages/:id",
+  catchAsync(async (req, res) => {
+    const site = await Heritage.findById(req.params.id);
+    res.render("sites/show", { site });
+  })
+);
 
-app.get("/heritages/:id/edit", async (req, res) => {
-  const site = await Heritage.findById(req.params.id);
-  res.render("sites/edit", { site });
-});
+app.get(
+  "/heritages/:id/edit",
+  catchAsync(async (req, res) => {
+    const site = await Heritage.findById(req.params.id);
+    res.render("sites/edit", { site });
+  })
+);
 
-app.put("/heritages/:id", async (req, res) => {
-  const { id } = req.params;
-  const site = await Heritage.findByIdAndUpdate(id, { ...req.body.heritage });
-  res.redirect(`/heritages/${site._id}`);
-});
+app.put(
+  "/heritages/:id",
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const site = await Heritage.findByIdAndUpdate(id, { ...req.body.heritage });
+    res.redirect(`/heritages/${site._id}`);
+  })
+);
 
-app.delete("/heritages/:id", async (req, res) => {
-  const { id } = req.params;
-  await Heritage.findByIdAndDelete(id);
-  res.redirect(`/heritages`);
+app.delete(
+  "/heritages/:id",
+  catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    await Heritage.findByIdAndDelete(id);
+    res.redirect(`/heritages`);
+  })
+);
+
+app.use((err, req, res, next) => {
+  res.send("something wrong");
 });
 
 app.listen(3000, () => {
