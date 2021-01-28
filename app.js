@@ -7,6 +7,7 @@ const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const Heritage = require("./models/heritage");
 const catchAsync = require("./utils/catchAsync");
+const ExpressError = require("./utils/ExpressError");
 
 mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
@@ -46,6 +47,7 @@ app.get("/heritages/new", (req, res) => {
 app.post(
   "/heritages",
   catchAsync(async (req, res, next) => {
+    if (!req.body.heritage) throw new ExpressError("Invalid Data", 400);
     const site = new Heritage(req.body.heritage);
     await site.save();
     res.redirect(`/heritages/${site._id}`);
@@ -86,8 +88,14 @@ app.delete(
   })
 );
 
+app.all("*", (req, res, next) => {
+  next(new ExpressError("Page not found", 404));
+});
+
 app.use((err, req, res, next) => {
-  res.send("something wrong");
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Uh! Oh Something went wrong";
+  res.status(statusCode).render("error", { err });
 });
 
 app.listen(3000, () => {
