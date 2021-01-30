@@ -9,7 +9,7 @@ const Heritage = require("./models/heritage");
 const Review = require("./models/review");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
-const { heritageSchema } = require("./joiSchemas");
+const { heritageSchema, reviewSchema } = require("./joiSchemas");
 
 mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
@@ -32,6 +32,16 @@ app.use(methodOverride("_method"));
 
 const validateSite = (req, res, next) => {
   const { error } = heritageSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);
@@ -103,6 +113,7 @@ app.delete(
 
 app.post(
   "/heritages/:id/reviews",
+  validateReview,
   catchAsync(async (req, res) => {
     const heritage = await Heritage.findById(req.params.id);
     const review = new Review(req.body.review);
