@@ -79,7 +79,7 @@ app.post(
 app.get(
   "/heritages/:id",
   catchAsync(async (req, res) => {
-    const site = await Heritage.findById(req.params.id);
+    const site = await Heritage.findById(req.params.id).populate("reviews");
     res.render("sites/show", { site });
   })
 );
