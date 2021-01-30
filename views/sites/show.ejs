@@ -31,7 +31,11 @@
         2 days ago
         <a href="/heritages">All sites</a>
       </div>
-      <form action="" class="mb-3">
+      <form
+        action="/heritages/<%= site.id %>/reviews"
+        method="POST"
+        class="mb-3"
+      >
         <div class="mb-3">
           <label class="form-label" for="rating">Rating</label>
           <input

@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const Heritage = require("./models/heritage");
+const Review = require("./models/review");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
 const { heritageSchema } = require("./joiSchemas");
@@ -97,6 +98,18 @@ app.delete(
     const { id } = req.params;
     await Heritage.findByIdAndDelete(id);
     res.redirect(`/heritages`);
+  })
+);
+
+app.post(
+  "/heritages/:id/reviews",
+  catchAsync(async (req, res) => {
+    const heritage = await Heritage.findById(req.params.id);
+    const review = new Review(req.body.review);
+    heritage.reviews.push(review);
+    await review.save();
+    await heritage.save();
+    res.redirect(`/heritages/${heritage._id}`);
   })
 );
 
