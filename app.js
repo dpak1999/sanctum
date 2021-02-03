@@ -13,6 +13,7 @@ mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 const db = mongoose.connection;
@@ -23,10 +24,13 @@ db.once("open", () => {
 const app = express();
 
 app.engine("ejs", ejsMate);
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/heritages", heritages);
 app.use("/heritages/:id/reviews", reviews);
