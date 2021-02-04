@@ -35,6 +35,7 @@ router.post(
   catchAsync(async (req, res, next) => {
     const site = new Heritage(req.body.heritage);
     await site.save();
+    req.flash("success", "Heritage site added successfully");
     res.redirect(`/heritages/${site._id}`);
   })
 );
