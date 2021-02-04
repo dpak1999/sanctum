@@ -26,6 +26,7 @@ router.post(
     heritage.reviews.push(review);
     await review.save();
     await heritage.save();
+    req.flash("success", "Review added successfully");
     res.redirect(`/heritages/${heritage._id}`);
   })
 );
@@ -36,6 +37,7 @@ router.delete(
     const { id, reviewId } = req.params;
     await Heritage.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
+    req.flash("error", "Review deleted successfully");
     res.redirect(`/heritages/${id}`);
   })
 );

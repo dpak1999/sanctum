@@ -44,6 +44,10 @@ router.get(
   "/:id",
   catchAsync(async (req, res) => {
     const site = await Heritage.findById(req.params.id).populate("reviews");
+    if (!site) {
+      req.flash("error", "No campground with that name found");
+      return res.redirect("/heritages");
+    }
     res.render("sites/show", { site });
   })
 );
@@ -52,6 +56,10 @@ router.get(
   "/:id/edit",
   catchAsync(async (req, res) => {
     const site = await Heritage.findById(req.params.id);
+    if (!site) {
+      req.flash("error", "No campground with that name found");
+      return res.redirect("/heritages");
+    }
     res.render("sites/edit", { site });
   })
 );
@@ -62,6 +70,7 @@ router.put(
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const site = await Heritage.findByIdAndUpdate(id, { ...req.body.heritage });
+    req.flash("success", "Heritage site updated successfully");
     res.redirect(`/heritages/${site._id}`);
   })
 );
@@ -71,6 +80,7 @@ router.delete(
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     await Heritage.findByIdAndDelete(id);
+    req.flash("error", "Heritage site deleted successfully");
     res.redirect(`/heritages`);
   })
 );
