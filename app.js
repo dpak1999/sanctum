@@ -10,9 +10,11 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStratergy = require("passport-local");
 const ExpressError = require("./utils/ExpressError");
-const heritages = require("./routes/heritages");
-const reviews = require("./routes/reviews");
 const User = require("./models/users");
+
+const usersRoutes = require("./routes/users");
+const heritagesRoutes = require("./routes/heritages");
+const reviewsRoutes = require("./routes/reviews");
 
 mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
@@ -62,8 +64,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/heritages", heritages);
-app.use("/heritages/:id/reviews", reviews);
+app.use("/", usersRoutes);
+app.use("/heritages", heritagesRoutes);
+app.use("/heritages/:id/reviews", reviewsRoutes);
 
 app.get("/", (req, res) => {
   res.render("home");
