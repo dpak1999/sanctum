@@ -7,9 +7,12 @@ const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStratergy = require("passport-local");
 const ExpressError = require("./utils/ExpressError");
 const heritages = require("./routes/heritages");
 const reviews = require("./routes/reviews");
+const User = require("./models/users");
 
 mongoose.connect("mongodb://localhost:27017/sanctum", {
   useNewUrlParser: true,
@@ -46,12 +49,19 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStratergy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
+
 app.use("/heritages", heritages);
 app.use("/heritages/:id/reviews", reviews);
 
