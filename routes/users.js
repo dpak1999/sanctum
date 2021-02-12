@@ -17,9 +17,11 @@ router.post(
       const { email, username, password } = req.body;
       const user = new User({ email, username });
       const registeredUser = await User.register(user, password);
-      console.log(registeredUser);
-      req.flash("success", "Welcome to sanctum");
-      res.redirect("/heritages");
+      req.login(registeredUser, (err) => {
+        if (err) return next(err);
+        req.flash("success", "Welcome to sanctum");
+        res.redirect("/heritages");
+      });
     } catch (e) {
       req.flash("error", "Uh Oh! such an user already exists");
       res.redirect("/register");
