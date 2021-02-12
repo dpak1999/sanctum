@@ -43,4 +43,10 @@ router.post(
   }
 );
 
+router.get("/logout", (req, res) => {
+  req.logout();
+  req.flash("success", "Good bye");
+  res.redirect("/heritages");
+});
+
 module.exports = router;
