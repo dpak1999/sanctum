@@ -6,6 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 const ExpressError = require("../utils/ExpressError");
 const Heritage = require("../models/heritage");
 const { heritageSchema } = require("../joiSchemas");
+const { isLoggedIn } = require("../middleware");
 
 const validateSite = (req, res, next) => {
   const { error } = heritageSchema.validate(req.body);
@@ -25,12 +26,13 @@ router.get(
   })
 );
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("sites/new");
 });
 
 router.post(
   "/",
+  isLoggedIn,
   validateSite,
   catchAsync(async (req, res, next) => {
     const site = new Heritage(req.body.heritage);
@@ -54,6 +56,7 @@ router.get(
 
 router.get(
   "/:id/edit",
+  isLoggedIn,
   catchAsync(async (req, res) => {
     const site = await Heritage.findById(req.params.id);
     if (!site) {
@@ -66,6 +69,7 @@ router.get(
 
 router.put(
   "/:id",
+  isLoggedIn,
   validateSite,
   catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -77,6 +81,7 @@ router.put(
 
 router.delete(
   "/:id",
+  isLoggedIn,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     await Heritage.findByIdAndDelete(id);
