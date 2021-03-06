@@ -36,6 +36,7 @@ router.post(
   validateSite,
   catchAsync(async (req, res, next) => {
     const site = new Heritage(req.body.heritage);
+    site.author = req.user._id;
     await site.save();
     req.flash("success", "Heritage site added successfully");
     res.redirect(`/heritages/${site._id}`);
@@ -45,7 +46,9 @@ router.post(
 router.get(
   "/:id",
   catchAsync(async (req, res) => {
-    const site = await Heritage.findById(req.params.id).populate("reviews");
+    const site = await Heritage.findById(req.params.id)
+      .populate("reviews")
+      .populate("author");
     if (!site) {
       req.flash("error", "No campground with that name found");
       return res.redirect("/heritages");
