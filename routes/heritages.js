@@ -3,20 +3,8 @@
 const express = require("express");
 const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
-const ExpressError = require("../utils/ExpressError");
 const Heritage = require("../models/heritage");
-const { heritageSchema } = require("../joiSchemas");
-const { isLoggedIn } = require("../middleware");
-
-const validateSite = (req, res, next) => {
-  const { error } = heritageSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
+const { isLoggedIn, isAuthor, validateSite } = require("../middleware");
 
 router.get(
   "/",
@@ -60,8 +48,10 @@ router.get(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req, res) => {
-    const site = await Heritage.findById(req.params.id);
+    const { id } = req.params;
+    const site = await Heritage.findById(id);
     if (!site) {
       req.flash("error", "No campground with that name found");
       return res.redirect("/heritages");
@@ -73,6 +63,7 @@ router.get(
 router.put(
   "/:id",
   isLoggedIn,
+  isAuthor,
   validateSite,
   catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -85,6 +76,7 @@ router.put(
 router.delete(
   "/:id",
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     await Heritage.findByIdAndDelete(id);
