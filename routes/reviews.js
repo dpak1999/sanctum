@@ -4,7 +4,7 @@ const router = express.Router({ mergeParams: true });
 const catchAsync = require("../utils/catchAsync");
 const Heritage = require("../models/heritage");
 const Review = require("../models/review");
-const { validateReview, isLoggedIn } = require("../middleware");
+const { validateReview, isLoggedIn, isReviewAuthor } = require("../middleware");
 
 router.post(
   "/",
@@ -25,6 +25,7 @@ router.post(
 router.delete(
   "/:reviewId",
   isLoggedIn,
+  isReviewAuthor,
   catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Heritage.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });

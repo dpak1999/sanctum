@@ -35,7 +35,12 @@ router.get(
   "/:id",
   catchAsync(async (req, res) => {
     const site = await Heritage.findById(req.params.id)
-      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "author",
+        },
+      })
       .populate("author");
     if (!site) {
       req.flash("error", "No campground with that name found");

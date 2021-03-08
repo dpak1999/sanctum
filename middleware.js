@@ -1,7 +1,8 @@
 /** @format */
 
 const { heritageSchema, reviewSchema } = require("./joiSchemas");
-const heritage = require("./models/heritage");
+const Heritage = require("./models/heritage");
+const Review = require("./models/review");
 const ExpressError = require("./utils/ExpressError");
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -25,9 +26,19 @@ module.exports.validateSite = (req, res, next) => {
 
 module.exports.isAuthor = async (req, res, next) => {
   const { id } = req.params;
-  const site = await heritage.findById(id);
+  const site = await Heritage.findById(id);
   if (!site.author.equals(req.user._id)) {
     req.flash("error", "You do not own this site");
+    return res.redirect(`/heritages/${id}`);
+  }
+  next();
+};
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+  const { id, reviewId } = req.params;
+  const review = await Review.findById(reviewId);
+  if (!review.author.equals(req.user._id)) {
+    req.flash("error", "You do not own this review");
     return res.redirect(`/heritages/${id}`);
   }
   next();
