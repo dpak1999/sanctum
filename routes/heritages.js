@@ -6,13 +6,18 @@ const catchAsync = require("../utils/catchAsync");
 const { isLoggedIn, isAuthor, validateSite } = require("../middleware");
 const heritages = require("../controllers/heritages");
 
-router.get("/", catchAsync(heritages.index));
+router
+  .route("/")
+  .get(catchAsync(heritages.index))
+  .post(isLoggedIn, validateSite, catchAsync(heritages.createNewSite));
 
 router.get("/new", isLoggedIn, heritages.renderNewForm);
 
-router.post("/", isLoggedIn, validateSite, catchAsync(heritages.createNewSite));
-
-router.get("/:id", catchAsync(heritages.showSite));
+router
+  .route("/:id")
+  .get(catchAsync(heritages.showSite))
+  .put(isLoggedIn, isAuthor, validateSite, catchAsync(heritages.updateSite))
+  .delete(isLoggedIn, isAuthor, catchAsync(heritages.deleteSite));
 
 router.get(
   "/:id/edit",
@@ -20,15 +25,5 @@ router.get(
   isAuthor,
   catchAsync(heritages.renderEditForm)
 );
-
-router.put(
-  "/:id",
-  isLoggedIn,
-  isAuthor,
-  validateSite,
-  catchAsync(heritages.updateSite)
-);
-
-router.delete("/:id", isLoggedIn, isAuthor, catchAsync(heritages.deleteSite));
 
 module.exports = router;
