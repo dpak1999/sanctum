@@ -12,11 +12,12 @@ const upload = multer({ storage });
 router
   .route("/")
   .get(catchAsync(heritages.index))
-  // .post(isLoggedIn, validateSite, catchAsync(heritages.createNewSite));
-  .post(upload.single("image"), (req, res) => {
-    console.log(req.body, req.file);
-    res.send("It worked");
-  });
+  .post(
+    isLoggedIn,
+    upload.array("image"),
+    validateSite,
+    catchAsync(heritages.createNewSite)
+  );
 
 router.get("/new", isLoggedIn, heritages.renderNewForm);
 
