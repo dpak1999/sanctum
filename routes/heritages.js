@@ -6,7 +6,8 @@ const catchAsync = require("../utils/catchAsync");
 const { isLoggedIn, isAuthor, validateSite } = require("../middleware");
 const heritages = require("../controllers/heritages");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const { storage } = require("../cloudinary");
+const upload = multer({ storage });
 
 router
   .route("/")
@@ -14,6 +15,7 @@ router
   // .post(isLoggedIn, validateSite, catchAsync(heritages.createNewSite));
   .post(upload.single("image"), (req, res) => {
     console.log(req.body, req.file);
+    res.send("It worked");
   });
 
 router.get("/new", isLoggedIn, heritages.renderNewForm);
