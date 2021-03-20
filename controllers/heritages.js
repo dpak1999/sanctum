@@ -13,8 +13,10 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createNewSite = async (req, res, next) => {
   const site = new Heritage(req.body.heritage);
+  site.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
   site.author = req.user._id;
   await site.save();
+  console.log(site);
   req.flash("success", "Heritage site added successfully");
   res.redirect(`/heritages/${site._id}`);
 };

@@ -11,8 +11,10 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  folder: "Sanctum",
-  allowedFormats: ["jpeg", "png", "jpg"],
+  params: {
+    folder: "Sanctum",
+    allowedFormats: ["jpeg", "png", "jpg"],
+  },
 });
 
 module.exports = {
