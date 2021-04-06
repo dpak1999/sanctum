@@ -17,7 +17,6 @@ module.exports.createNewSite = async (req, res, next) => {
   site.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
   site.author = req.user._id;
   await site.save();
-  console.log(site.images);
   req.flash("success", "Heritage site added successfully");
   res.redirect(`/heritages/${site._id}`);
 };
