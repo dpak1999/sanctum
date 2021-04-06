@@ -50,6 +50,9 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateSite = async (req, res) => {
   const { id } = req.params;
   const site = await Heritage.findByIdAndUpdate(id, { ...req.body.heritage });
+  const newImg = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+  site.images.push(...newImg);
+  await site.save();
   req.flash("success", "Heritage site updated successfully");
   res.redirect(`/heritages/${site._id}`);
 };

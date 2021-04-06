@@ -24,7 +24,13 @@ router.get("/new", isLoggedIn, heritages.renderNewForm);
 router
   .route("/:id")
   .get(catchAsync(heritages.showSite))
-  .put(isLoggedIn, isAuthor, validateSite, catchAsync(heritages.updateSite))
+  .put(
+    isLoggedIn,
+    isAuthor,
+    upload.array("image"),
+    validateSite,
+    catchAsync(heritages.updateSite)
+  )
   .delete(isLoggedIn, isAuthor, catchAsync(heritages.deleteSite));
 
 router.get(
