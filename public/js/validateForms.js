@@ -2,7 +2,7 @@
 
 (function () {
   "use strict";
-
+  bsCustomFileInput.init();
   var forms = document.querySelectorAll(".needs-validation");
 
   Array.prototype.slice.call(forms).forEach(function (form) {
