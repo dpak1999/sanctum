@@ -1,7 +1,11 @@
 /** @format */
 
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const Heritage = require("../models/heritage");
 const { cloudinary } = require("../cloudinary");
+
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 
 module.exports.index = async (req, res) => {
   const sites = await Heritage.find({});
@@ -13,12 +17,20 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createNewSite = async (req, res, next) => {
-  const site = new Heritage(req.body.heritage);
-  site.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-  site.author = req.user._id;
-  await site.save();
-  req.flash("success", "Heritage site added successfully");
-  res.redirect(`/heritages/${site._id}`);
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: req.body.heritage.location,
+      limit: 1,
+    })
+    .send();
+  console.log(geoData.body.features[0].geometry.coordinates);
+  res.send("Ok");
+  // const site = new Heritage(req.body.heritage);
+  // site.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+  // site.author = req.user._id;
+  // await site.save();
+  // req.flash("success", "Heritage site added successfully");
+  // res.redirect(`/heritages/${site._id}`);
 };
 
 module.exports.showSite = async (req, res) => {
