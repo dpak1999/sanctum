@@ -23,14 +23,14 @@ module.exports.createNewSite = async (req, res, next) => {
       limit: 1,
     })
     .send();
-  console.log(geoData.body.features[0].geometry.coordinates);
-  res.send("Ok");
-  // const site = new Heritage(req.body.heritage);
-  // site.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-  // site.author = req.user._id;
-  // await site.save();
-  // req.flash("success", "Heritage site added successfully");
-  // res.redirect(`/heritages/${site._id}`);
+  const site = new Heritage(req.body.heritage);
+  site.geometry = geoData.body.features[0].geometry;
+  site.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+  site.author = req.user._id;
+  await site.save();
+  console.log(site);
+  req.flash("success", "Heritage site added successfully");
+  res.redirect(`/heritages/${site._id}`);
 };
 
 module.exports.showSite = async (req, res) => {
