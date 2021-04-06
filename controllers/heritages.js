@@ -1,6 +1,7 @@
 /** @format */
 
 const Heritage = require("../models/heritage");
+const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
   const sites = await Heritage.find({});
@@ -53,6 +54,14 @@ module.exports.updateSite = async (req, res) => {
   const newImg = req.files.map((f) => ({ url: f.path, filename: f.filename }));
   site.images.push(...newImg);
   await site.save();
+  if (req.body.deleteImages) {
+    for (let filename of req.body.deleteImages) {
+      await cloudinary.uploader.destroy(filename);
+    }
+    await site.updateOne({
+      $pull: { images: { filename: { $in: req.body.deleteImages } } },
+    });
+  }
   req.flash("success", "Heritage site updated successfully");
   res.redirect(`/heritages/${site._id}`);
 };
