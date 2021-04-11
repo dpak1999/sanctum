@@ -8,4 +8,11 @@ const map = new mapboxgl.Map({
   zoom: 8,
 });
 
-new mapboxgl.Marker().setLngLat(site.geometry.coordinates).addTo(map);
+new mapboxgl.Marker()
+  .setLngLat(site.geometry.coordinates)
+  .setPopup(
+    new mapboxgl.Popup({ offset: 25 }).setHTML(
+      `<h5>${site.title}</h5> <p>${site.location}</p>`
+    )
+  )
+  .addTo(map);
