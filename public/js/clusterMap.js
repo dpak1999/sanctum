@@ -3,7 +3,7 @@
 mapboxgl.accessToken = mapToken;
 var map = new mapboxgl.Map({
   container: "map",
-  style: "mapbox://styles/mapbox/dark-v10",
+  style: "mapbox://styles/mapbox/light-v10",
   center: [-103.59179687498357, 40.66995747013945],
   zoom: 3,
 });
@@ -12,9 +12,9 @@ map.on("load", function () {
   // Add a new source from our GeoJSON data and
   // set the 'cluster' option to true. GL-JS will
   // add the point_count property to your source data.
-  map.addSource("earthquakes", {
+  map.addSource("heritages", {
     type: "geojson",
-    // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+    // Point to GeoJSON data. This example visualizes all M1.0+ heritages
     // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
     data: sites,
     cluster: true,
@@ -25,7 +25,7 @@ map.on("load", function () {
   map.addLayer({
     id: "clusters",
     type: "circle",
-    source: "earthquakes",
+    source: "heritages",
     filter: ["has", "point_count"],
     paint: {
       // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
@@ -36,20 +36,20 @@ map.on("load", function () {
       "circle-color": [
         "step",
         ["get", "point_count"],
-        "#51bbd6",
-        100,
-        "#f1f075",
-        750,
-        "#f28cb1",
+        "#00bcd4",
+        10,
+        "#2196f3",
+        30,
+        "#3f51b5",
       ],
-      "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+      "circle-radius": ["step", ["get", "point_count"], 15, 10, 20, 30, 30],
     },
   });
 
   map.addLayer({
     id: "cluster-count",
     type: "symbol",
-    source: "earthquakes",
+    source: "heritages",
     filter: ["has", "point_count"],
     layout: {
       "text-field": "{point_count_abbreviated}",
@@ -61,7 +61,7 @@ map.on("load", function () {
   map.addLayer({
     id: "unclustered-point",
     type: "circle",
-    source: "earthquakes",
+    source: "heritages",
     filter: ["!", ["has", "point_count"]],
     paint: {
       "circle-color": "#11b4da",
@@ -78,7 +78,7 @@ map.on("load", function () {
     });
     var clusterId = features[0].properties.cluster_id;
     map
-      .getSource("earthquakes")
+      .getSource("heritages")
       .getClusterExpansionZoom(clusterId, function (err, zoom) {
         if (err) return;
 
