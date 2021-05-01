@@ -12,9 +12,10 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStratergy = require("passport-local");
 const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+
 const ExpressError = require("./utils/ExpressError");
 const User = require("./models/users");
-
 const usersRoutes = require("./routes/users");
 const heritagesRoutes = require("./routes/heritages");
 const reviewsRoutes = require("./routes/reviews");
@@ -57,6 +58,7 @@ app.use(session(sessionConfig));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(helmet({ contentSecurityPolicy: false }));
 
 passport.use(new LocalStratergy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
