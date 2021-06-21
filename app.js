@@ -13,6 +13,7 @@ const passport = require("passport");
 const LocalStratergy = require("passport-local");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const MongoDBStore = require("connect-mongo");
 
 const ExpressError = require("./utils/ExpressError");
 const User = require("./models/users");
@@ -20,7 +21,7 @@ const usersRoutes = require("./routes/users");
 const heritagesRoutes = require("./routes/heritages");
 const reviewsRoutes = require("./routes/reviews");
 
-mongoose.connect("mongodb://localhost:27017/sanctum", {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
@@ -33,7 +34,16 @@ db.once("open", () => {
   console.log("Db connected");
 });
 
+const store = MongoDBStore.create({
+  mongoUrl: process.env.MONGO_URI,
+  crypto: {
+    secret: process.env.MONGO_SECRET,
+  },
+  touchAfter: 24 * 60 * 60,
+});
+
 const sessionConfig = {
+  store,
   secret: "thisisasecretkey",
   resave: false,
   saveUninitialized: true,
