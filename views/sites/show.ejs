@@ -40,7 +40,9 @@
         <p class="card-text"><%= site.description%></p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">$<%= site.price %>/night</li>
+        <li class="list-group-item">
+          Average Price : <span>Rs <%= site.price %></span>
+        </li>
         <li class="list-group-item text-muted"><%= site.location %></li>
         <li class="list-group-item">
           Submitted By :- <%= site.author.username %>
